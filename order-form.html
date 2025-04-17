@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>爆薏仁與果乾訂購單</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #fffef2; }
+    h1 { color: #6d4c41; }
+    label { display: block; margin-top: 10px; }
+    input[type="number"], input[type="text"] {
+      padding: 6px; width: 200px; margin-top: 4px;
+    }
+    .item-block { margin-left: 20px; margin-top: 10px; }
+    button {
+      margin-top: 20px; padding: 10px 20px;
+      background-color: #6d4c41; color: white; border: none; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>爆薏仁與果乾 訂購單</h1>
+
+  <form id="orderForm">
+    <label for="name">姓名 *</label>
+    <input type="text" id="name" name="姓名" required>
+
+    <h3>爆薏仁（每包 120 元）</h3>
+    <div class="item-block">
+      <label>焦糖爆薏仁：<input type="number" name="焦糖爆薏仁" value="0" min="0"></label>
+      <label>醬燒海苔：<input type="number" name="醬燒海苔" value="0" min="0"></label>
+      <label>墨西哥辣味：<input type="number" name="墨西哥辣味" value="0" min="0"></label>
+      <label>玉米濃湯：<input type="number" name="玉米濃湯" value="0" min="0"></label>
+      <label>椰花蜜：<input type="number" name="椰花蜜" value="0" min="0"></label>
+      <label>醇黑可可：<input type="number" name="醇黑可可" value="0" min="0"></label>
+    </div>
+
+    <h3>果乾（每包 100 元）</h3>
+    <div class="item-block">
+      <label>鳳梨果乾：<input type="number" name="鳳梨果乾" value="0" min="0"></label>
+      <label>芭樂果乾：<input type="number" name="芭樂果乾" value="0" min="0"></label>
+      <label>火龍果乾：<input type="number" name="火龍果乾" value="0" min="0"></label>
+      <label>草莓果乾：<input type="number" name="草莓果乾" value="0" min="0"></label>
+    </div>
+
+    <button type="submit">送出訂單</button>
+  </form>
+
+  <div id="result" style="margin-top:30px;"></div>
+
+  <script>
+    const prices = {
+      "焦糖爆薏仁": 120,
+      "醬燒海苔": 120,
+      "墨西哥辣味": 120,
+      "玉米濃湯": 120,
+      "椰花蜜": 120,
+      "醇黑可可": 120,
+      "鳳梨果乾": 100,
+      "芭樂果乾": 100,
+      "火龍果乾": 100,
+      "草莓果乾": 100
+    };
+
+    document.getElementById("orderForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      let total = 0;
+      let summary = `<h2>感謝您的訂購，${formData.get("姓名")}！</h2><h3>訂單明細：</h3><ul>`;
+
+      for (let [key, value] of formData.entries()) {
+        if (key !== "姓名") {
+          const qty = parseInt(value);
+          if (qty > 0) {
+            const subtotal = qty * prices[key];
+            total += subtotal;
+            summary += `<li>${key} x ${qty} = $${subtotal}</li>`;
+          }
+        }
+      }
+
+      summary += `</ul><h3>總金額：$${total}</h3>`;
+      document.getElementById("result").innerHTML = summary;
+      form.reset();
+    });
+  </script>
+</body>
+</html>
